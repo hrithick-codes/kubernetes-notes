@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+# Name of the pod
+metadata:
+  name: flask-helloworld
+# What image each pod should be running?
+spec:
+  containers:
+  - name: flask-helloworld
+    image: digitalocean/flask-helloworld
+    # Expose this port
+    ports:
+    - containerPort: 5000

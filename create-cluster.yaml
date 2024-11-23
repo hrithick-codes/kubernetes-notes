@@ -1,0 +1,9 @@
+kind: Cluster  # We want to create a cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+# k8s cluster possess 1 master node
+# The master node consists of API Server, etcd, kube-control-manager and scheduler
+# scheduler and kube-controller-manager
+nodes:
+  - role: control-plane  # Master
+  - role: worker         # Worker
+  - role: worker         # Worker

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+# Name of the deployment is flask-helloworld
+metadata:
+  name: flask-helloworld
+spec:
+  replicas: 3 # We want 3 pods
+  # This deployment will control all the pods
+  # with this app name
+  selector:
+    matchLabels:
+      app: helloworld-deployment
+  # all the pods should have a this app name
+  template:
+    metadata:
+      labels:
+        app: helloworld-deployment
+  # what image each pod should run?
+    spec:
+      containers:
+      - name: flask-helloworld-container
+        image: digitalocean/flask-helloworld:latest
+        ports:
+        - containerPort: 5000
+        
