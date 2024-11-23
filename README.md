@@ -5,7 +5,7 @@ to manage container, so that the developer need not to be worrying about
 running, managing containers/services. It reduces the mental overhead of 
 the developer for managing containers.
 
-
+****
 ## 1. Create a cluster using Kind
 
 Install using
@@ -53,7 +53,17 @@ Delete all the clusters using
 
 Now we have the nodes running.
 
-## 2. Create pods
+## 2. What is kubectl?
+kubectl controls the Kubernetes cluster manager. A k8s master node consists of API server, etcd, kube-control-manager, scheduler. User sends HTTP request to API server with correct credentials, API server verifies it and follows user given instructions.
+
+![master node](images/master-node.jpg "master node")
+
+So where are the credentials stored that are needed for sending HTTP request? kubectl gets the credentials from
+```~/.kube/config``` file.
+
+```cat cat ~/.kube/config```
+
+## 3. Create pods
 
 Pods contain one or multiple containers. Pods are the smallest unit we can run on a k8s cluster.
 
@@ -71,6 +81,9 @@ spec:
     - containerPort: 5000
 ```
 
+Apply the config using 
+```kubectl apply -f create-pods.yaml```
+
 See the pods running,
 ```kubectl get pods```
 
@@ -78,7 +91,7 @@ The pod is running as of now. But we only have one pod running. What if we want 
 
 This is where a Deployment comes into the picture.
 
-## 3. Create a Deployment
+## 4. Create a Deployment
 
 The deployment file looks like this,
 ```yaml
@@ -113,8 +126,9 @@ flask-helloworld-587b86cd85-xmh7s   1/1     Running             0          14s
 
 Now these pods are highly resilient. We can try stopping one but it will again recreate another one to make sure we have 3 pods running always! This is done by the ```ReplicaSet```.
 
-Deployment creates ReplicaSets, ReplicaSets manages all the pods, scales pods up/down for rolling updates. Rolls back the update in case of errors.
+Deployments create and manage ReplicaSets, which handle all the Pods for a Deployment. When you perform a rolling update, the Deployment gradually creates Pods in a new ReplicaSet while scaling down the old Pods. It checks if the new Pods are healthy and only proceeds if they pass health checks. If an error occurs during the update, the Deployment can roll back to a previous ReplicaSet. Kubernetes keeps previous ReplicaSets (with zero replicas) for rollback purposes, and a retention policy controls how many revisions are kept.
 
-## 4. How do We expose our containers?
 
-We use ```Services```
+## 5. How do We expose our containers?
+
+We use ```Services```. 
